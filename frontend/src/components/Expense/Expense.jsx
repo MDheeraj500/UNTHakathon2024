@@ -4,6 +4,7 @@ import { categoryOptions } from '../../utils/constants';
 import DatePicker from '../CustomComponents/DatePicker';
 import Dropdown from '../CustomComponents/Dropdown';
 import TextInput from '../CustomComponents/TextInput';
+import Cookies from 'js-cookie';
 
 const Expense = () => {
     const [category, setCategory] = useState('');
@@ -23,8 +24,9 @@ const Expense = () => {
 
     const handleSubmitExpense = async () => {
         if (!isFormValid) return; // Prevent submission if form is invalid
-
+        const user_id = Cookies.get("user_id");
         const expenseData = {
+            user_id,
             description,
             amount: parseFloat(amount),
             category,
@@ -32,7 +34,7 @@ const Expense = () => {
         };
 
         try {
-            const response = await axios.post("http://localhost:8080/api/expenses", expenseData);
+            const response = await axios.post("http://127.0.0.1:5000/expense", expenseData);
             if (response.status === 201) {
                 alert("Expense added successfully!");
                 // Reset form fields after successful submission
@@ -40,6 +42,8 @@ const Expense = () => {
                 setAmount('');
                 setCategory('');
                 setDate('');
+
+                navigate("/dashboard"); //navigating to analysis dashboard
             } else {
                 alert("Error adding expense. Please try again.");
             }
