@@ -39,3 +39,46 @@ Follow these steps to set up the project on your local machine:
 ```bash
 git clone <repository-link>
 cd budgeting-tool
+
+### 2. Install Dependencies
+```bash
+pip install -r requirements.txt
+
+### 3. Set Up MySQL Database
+Update db_config in app.py with your MySQL credentials.
+Run the server to auto-create tables (user and ExpenseLog).
+
+### 4. Start the Server
+```bash
+python app.py
+
+
+## 📬 API Endpoints
+
+Explore these endpoints for full functionality:
+
+- **POST /signup** - Register a new user.
+- **POST /login** - Authenticate and access your dashboard.
+- **GET /dashboard/<user_id>** - View personalized financial metrics and goals.
+- **POST /expense** - Log expenses to the `ExpenseLog`.
+- **GET /calculate_savings/<user_id>** - View monthly savings insights and suggestions.
+
+
+## 🎉 How It Works
+
+### Teachers
+- **Sign Up and Set Goals**: Add monthly income, fixed and variable expenses, and choose retirement contributions (TRS, 403(b), or IRA).
+- **Dashboard Insights**: Get savings recommendations based on income and retirement goals, along with monthly updates.
+
+### Students
+- **Automate Your Expenses**: Log and categorize expenses quickly.
+- **Stay on Track**: Review your expenses and savings to manage your budget effortlessly.
+
+
+## 🌱 Contributing
+
+We welcome contributions to expand and enhance the tool! Please fork the repository, open issues, and submit pull requests.
+
+
+💼 Authors & Acknowledgments
+Thank you to all our mentors, collaborators, and everyone who provided feedback during UNTHackathon 2024!
