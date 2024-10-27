@@ -80,7 +80,7 @@
   left: 0;
   bottom:0px;
   width: 30%;
-  z-index: 1000;
+  z-index: 10;
   pointer-events: none;
   
   }

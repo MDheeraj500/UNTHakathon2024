@@ -5,8 +5,10 @@ import DatePicker from '../CustomComponents/DatePicker';
 import Dropdown from '../CustomComponents/Dropdown';
 import TextInput from '../CustomComponents/TextInput';
 import Cookies from 'js-cookie';
+import { useNavigate } from "react-router-dom";
 
 const Expense = () => {
+    const navigate = useNavigate();
     const [category, setCategory] = useState('');
     const [date, setDate] = useState('');
     const [description, setDescription] = useState('');
