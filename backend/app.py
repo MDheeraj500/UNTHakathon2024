@@ -76,6 +76,47 @@ def create_table(query, table_name):
             cursor.close()
             conn.close()
 
+import math
+
+# Define the calculation logic
+def calculate_monthly_savings(user_data):
+    # Input data
+    fixed_expenses = user_data['fixed_expenses'] or 0
+    variable_expenses = user_data['variable_expenses'] or 0
+    monthly_income = user_data['monthly_income'] or 0
+    trs_amt = user_data['TRS_amt'] or 0
+    _403b_amt = user_data['403b_amt'] or 0
+    ira_amt = user_data['IRA_amt'] or 0
+    retirement_age_goal = user_data['Retirement_age_goal']
+    current_age = user_data['age']
+
+    # Constants for calculation
+    annual_return_rate = 0.06  # Assuming 6% annual growth
+    monthly_return_rate = annual_return_rate / 12
+    years_to_retirement = retirement_age_goal - current_age
+    total_months = years_to_retirement * 12
+
+    # Monthly retirement expenses
+    target_retirement_savings = 300 * (fixed_expenses + variable_expenses)
+
+    # Calculate required monthly savings
+    try:
+        monthly_long_term_savings = (monthly_return_rate / (math.pow(1 + monthly_return_rate, total_months) - 1)) * target_retirement_savings
+    except ZeroDivisionError:
+        monthly_long_term_savings = target_retirement_savings / total_months  # fallback if zero division error
+
+    # Available savings based on income
+    available_savings = monthly_income - (fixed_expenses + variable_expenses)
+
+    # Feasible savings amount
+    feasible_savings = min(monthly_long_term_savings, available_savings)
+    result = {
+        "required_monthly_savings": round(float(monthly_long_term_savings), 2),
+        "feasible_savings": round(float(feasible_savings), 2),
+        "suggestion": "Increase contributions or reduce expenses" if feasible_savings < monthly_long_term_savings else "Savings goal is achievable"
+    }
+    return result
+
 
 # Define a simple route
 @app.route("/")
@@ -283,6 +324,35 @@ def add_expense():
 
     except Error as err:
         return jsonify({"error": str(err)}), 500
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+# API endpoint for calculating savings
+@app.route('/calculate_savings/<int:user_id>', methods=['GET'])
+def calculate_savings(user_id):
+    conn = None
+    try:
+        # Establish database connection
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor(dictionary=True)
+
+        # Fetch user data
+        cursor.execute("SELECT * FROM user WHERE user_id = %s", (user_id,))
+        user_data = cursor.fetchone()
+
+        if not user_data:
+            return jsonify({"error": "User not found"}), 404
+
+        # Perform the calculation
+        result = calculate_monthly_savings(user_data)
+
+        return jsonify(result)
+
+    except Error as err:
+        return jsonify({"error": str(err)}), 500
+
     finally:
         if conn and conn.is_connected():
             cursor.close()
