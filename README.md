@@ -83,5 +83,4 @@ ClearCash offers a range of endpoints to manage data and provide insights:
 
 ---
 
-## 🌱 Contributing
-We welcome contributions! Feel free to fork the repository, open issues, and submit pull requests to enhance ClearCash furt
+Google Drive Link for Video Presentation: https://drive.google.com/drive/folders/1hNVGhp8vlVDIttX84P1mFuoejeuO0N9T?usp=sharing
