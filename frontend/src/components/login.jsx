@@ -1,7 +1,7 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -33,8 +33,8 @@ const Login = () => {
                     alert("Invalid Credentials!");
                 } else if (reply === 200)
                     Cookies.set('user_id', response.data.user_id, { expires: 7 });
-                    console.log("User ID set in cookie:", response.data.user_id);
-                    {
+                console.log("User ID set in cookie:", response.data.user_id);
+                {
                     navigate("/dashboard"); // Navigate to the dashboard on successful login
                 }
             } catch (error) {
@@ -56,34 +56,34 @@ const Login = () => {
                 <div className="p-8">
 
 
-                    <h2 className="text-[3rem] font-bold text-purple mb-6">Log In</h2>
+                    <h2 className="w-full text-6xl font-bold text-center   mb-6 griffy-regular">Log In</h2>
                     <div className="mb-6">
-                        <label htmlFor="email" className="block text-lg font-medium text-ghost-white">
+                        <label htmlFor="email" className="block text-lg font-medium text-ghost-white text-start">
                             Email Address:
                         </label>
                         <input
                             type="email"
                             ref={email}
-                            className="w-full px-3 py-2 mt-2 mb-4 text-gray-200 bg-dark-gray bg-opacity-70 rounded focus:outline-none focus:ring-2 focus:ring-neon-orange"
+                            className="w-full px-3 py-2 mt-2 mb-4 text-gray-200 bg-dark-gray border border-zinc-800 bg-opacity-70 rounded focus:outline-none focus:ring-2 focus:ring-neon-orange"
                             placeholder="Enter your email"
                         />
-                        <label htmlFor="password" className="block text-lg font-medium text-ghost-white">
+                        <label htmlFor="password" className="block text-lg font-medium text-ghost-white text-start">
                             Password:
                         </label>
                         <input
                             type="password"
                             ref={password}
-                            className="w-full px-3 py-2 mt-2 mb-6 text-gray-200 bg-dark-gray bg-opacity-70 rounded focus:outline-none focus:ring-2 focus:ring-neon-orange"
+                            className="w-full px-3 py-2 mt-2 mb-6 text-gray-200 bg-dark-gray border border-zinc-800 bg-opacity-70 rounded focus:outline-none focus:ring-2 focus:ring-neon-orange"
                             placeholder="Enter your password"
                         />
-                        <div className="flex items-center justify-center mb-4">
+                        <div className="flex items-start justify-center mb-4">
                             <input
                                 type="checkbox"
                                 checked={isChecked}
                                 onChange={() => setIsChecked(!isChecked)}
-                                className="form-checkbox h-5 w-5 text-neon-green bg-dark-gray rounded focus:ring-neon-green focus:outline-none"
+                                className="form-checkbox h-6 w-6 text-neon-green bg-dark-gray border border-zinc-800 rounded focus:ring-neon-green focus:outline-none accent-orange-500 "
                             />
-                            <label className="ml-3 text-sm text-ghost-white">
+                            <label className=" text-sm text-ghost-white text-left pl-3">
                                 By clicking here, I state that I have read and understood the terms and conditions.
                             </label>
                         </div>
@@ -98,13 +98,13 @@ const Login = () => {
                             onClick={handleSubmitLogin}
                             className="poison-button relative w-[16rem] px-4 py-2 bg-neon-orange text-white font-bold rounded shadow-black hover:bg-purple-700 transition duration-150 ease-in-out overflow-hidden"
                         >
-                            <span class="relative z-10">Submit</span>
+                            <span className="relative z-10">Submit</span>
 
-                            <div class="bubble"></div>
-                            <div class="bubble"></div>
-                            <div class="bubble"></div>
-                            <div class="bubble"></div>
-                            <div class="bubble"></div>
+                            <div className="bubble"></div>
+                            <div className="bubble"></div>
+                            <div className="bubble"></div>
+                            <div className="bubble"></div>
+                            <div className="bubble"></div>
                         </button>
                     </div>
                 </div>
