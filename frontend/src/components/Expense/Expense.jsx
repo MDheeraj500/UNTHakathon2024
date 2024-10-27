@@ -1,11 +1,11 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { categoryOptions } from '../../utils/constants';
 import DatePicker from '../CustomComponents/DatePicker';
 import Dropdown from '../CustomComponents/Dropdown';
 import TextInput from '../CustomComponents/TextInput';
-import Cookies from 'js-cookie';
-import { useNavigate } from "react-router-dom";
 
 const Expense = () => {
     const navigate = useNavigate();
@@ -44,10 +44,7 @@ const Expense = () => {
                 setAmount('');
                 setCategory('');
                 setDate('');
-
-                //navigate("/dashboard"); //navigating to analysis dashboard
                 navigate("/log-analysis");
-
             } else {
                 alert("Error adding expense. Please try again.");
             }
@@ -65,7 +62,7 @@ const Expense = () => {
             <div className="relative z-10 rounded-xl shadow-[0_0_20px_10px_rgba(0,0,0,0.8)] shadow-black text-center w-full max-w-md bg-dark-gray bg-opacity-80 overflow-hidden">
 
                 <div className="p-8">
-                    <h2 className="text-[3rem] font-bold text-purple mb-6">Add Expense</h2>
+                    <h2 className="text-6xl font-bold   mb-6 griffy-regular">Add Expense</h2>
                     <div className="mb-6">
                         {/* Description Input */}
                         <TextInput

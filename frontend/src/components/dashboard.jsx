@@ -1,19 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { Pie } from "react-chartjs-2";
-import Cookies from 'js-cookie';
-import {
-    Chart as ChartJS,
-    ArcElement,
-    Tooltip,
-    Legend,
-} from "chart.js";
 import axios from "axios";
-import Navbar from "./navbar";
+import {
+    ArcElement,
+    Chart as ChartJS,
+    Legend,
+    Tooltip,
+} from "chart.js";
+import Cookies from 'js-cookie';
+import { useEffect, useState } from "react";
+import { Pie } from "react-chartjs-2";
 import { Link } from "react-router-dom";
+import ghost1 from "../assets/ghost-1.png";
+import backgroundImage2 from '../assets/ghost-white.webp';
+import backgroundImage from '../assets/green_witch.webp';
+import pieBackground from "../assets/orange_pumpkin.webp";
+import backgroundImage3 from '../assets/purple-spirit.webp';
+import backgroundImage4 from '../assets/yellow-monster.webp';
+import CustomLink from "./CustomComponents/CustomLink";
+import Navbar from "./navbar";
+
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Dashboard = () => {
+    const [waterActive, setWaterActive] = useState(false); // Track water animation
+
     const [expenses, setExpenses] = useState({
         fixedExpense: 0,
         saving: 0,
@@ -94,44 +104,73 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="min-h-screen bg-black flex flex-col">
+        <div className="min-h-screen bg-zinc-950 flex flex-col relative">
             <Navbar />
-
+            <div className="ghost-1">
+                <img src={ghost1} height={500} width={500} />
+            </div>
+            <div className="ghost-2">
+                <img src={ghost1} height={400} width={400} />
+            </div>
             <div className="flex flex-grow items-center justify-center">
                 <div className="container mx-auto px-4 py-8 flex flex-col items-center">
-                    <h1 className="text-5xl font-bold text-orange-300 mb-8 ">Dashboard</h1>
+                    <h1 className="text-9xl font-bold text-orange-300 mb-8 griffy-regular ">Dashboard</h1>
 
                     <div className=" h-full w-full border-8 border-white rounded-3xl p-8">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                             {/* Pie Chart Container */}
-                            <div className="bg-dark-gray rounded-lg p-6 h-[30rem] flex items-center justify-center">
-                                <div className="w-full h-full">
+                            <div
+                                className="bg-dark-gray rounded-lg p-6 h-[30rem] flex items-center justify-center relative overflow-hidden transition duration-300 ease-in-out group"
+                                style={{
+                                    backgroundImage: `url(${pieBackground})`, // Specify the background image
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center",
+                                }}
+                            >
+                                {/* Background overlay that changes opacity on group hover */}
+                                <div className="absolute inset-0 bg-dark-gray opacity-70- group-hover:opacity-70 transition-opacity duration-300 ease-in-out"></div>
+
+                                <div className="w-full h-full relative z-10">
                                     <Pie data={pieChartData} options={pieChartOptions} />
                                 </div>
                             </div>
 
+
                             {/* Stats Container */}
                             <div className="grid grid-rows-3 gap-4 h-[30rem]">
-
-                                <Link to="/log-analysis" className="bg-witch-green rounded-lg p-6 flex flex-col items-center justify-center">
-                                    <h2 className="text-xl font-semibold text-orange-300">Personal Expense</h2>
-                                    <p className="text-white">0 out of ${expenses.personalExpense || dummyData.personalExpense}</p>
+                                <Link to="/log-analysis">
+                                    <CustomLink
+                                        backgroundImage={backgroundImage}
+                                        overlayColor="bg-orange-500"
+                                        title="Personal Expense"
+                                        description=""
+                                    />
                                 </Link>
+                                <Link to="/add-expense">
+                                    <CustomLink
+                                        backgroundImage={backgroundImage2}
+                                        overlayColor="bg-purple-500"
+                                        title="Add Expense"
+                                        description=""
+                                    />
 
-                                <Link to="/add-expense" className="bg-spooky-orange rounded-lg p-6 flex flex-col items-center justify-center">
-                                    <h2 className="text-xl font-semibold text-orange-300">Add Expense</h2>
-                                    <p className="text-white">Add Expense</p>
                                 </Link>
+                                <Link to="/retirement-plan"
+                                >
 
-                                <div className="bg-deep-gray rounded-lg p-6 flex flex-col items-center justify-center">
-                                    <h2 className="text-xl font-semibold text-orange-300">Savings</h2>
-                                    <p className="text-white">0 out of ${expenses.saving || dummyData.saving}</p>
-                                </div>
-
-                                <div className="bg-monster-yellow rounded-lg p-6 flex flex-col items-center justify-center">
-                                    <h2 className="text-xl font-semibold text-orange-300">Financial Literacy</h2>
-                                    <p className="text-white">0 out of 200</p>
-                                </div>
+                                    <CustomLink
+                                        backgroundImage={backgroundImage3}
+                                        overlayColor="bg-red-500"
+                                        title="Retirement Plan"
+                                        description=""
+                                    />
+                                </Link>
+                                <CustomLink
+                                    backgroundImage={backgroundImage4}
+                                    overlayColor="bg-sky-500"
+                                    title="Financial Literacy"
+                                    description=""
+                                />
                             </div>
                         </div>
                     </div>

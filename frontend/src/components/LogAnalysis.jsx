@@ -20,21 +20,20 @@ const LogAnalysis = () => {
         try {
             const response = await axios.get("http://127.0.0.1:5000/LogAnalysis");
             const res = response.data;
-            setDashboardData(res);
-            console.log("Fetched Data:", res);  // Log only the fetched data
+            setDashboardData(res);  // Use direct set without async/await
+            console.log("Fetched Data:", res);  // Log only fetched data
         } catch (error) {
             console.error("Error fetching log analysis data:", error);
         }
-    }, []); 
+    }, []);
 
     useEffect(() => {
-        fetchLogAnalysisData();
+        fetchLogAnalysisData();  // Call only once
     }, [fetchLogAnalysisData]);
 
     useEffect(() => {
-        console.log("Updated Dashboard Data:", dashboardData);
+        console.log("Updated Dashboard Data:", dashboardData);  // Logs on each state change
     }, [dashboardData]);
-
 
     return (
         <div className="h-screen w-full font-inter bg-zinc-900 text-white relative overflow-hidden">
@@ -47,7 +46,7 @@ const LogAnalysis = () => {
 
             {/* Main Content */}
             <div className="flex flex-col gap-5 p-4 px-10 relative">
-                <h2 className="font-extrabold text-3xl">Personal Expense Log Analysis</h2>
+                <h2 className="font-extrabold text-3xl  griffy-regular">Personal Expense Log Analysis</h2>
                 
                 <div className="flex flex-row items-center gap-5 w-full">
                     <CustomBarChart data={dashboardData.all_categories} />

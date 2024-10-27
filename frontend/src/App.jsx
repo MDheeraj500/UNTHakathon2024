@@ -6,6 +6,7 @@ import { Navigate } from "react-router";
 import Expense from './components/Expense/Expense';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import LogAnalysis from './components/LogAnalysis';
+import RetirementPlan from './components/RetirementPlan';
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/add-expense" element={<Expense />} />
         <Route path="/log-analysis" element={<LogAnalysis />} />
+        <Route path="/retirement-plan" element={<RetirementPlan />} />
       </Routes>
     </Router>
   )

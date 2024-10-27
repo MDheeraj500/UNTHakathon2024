@@ -3,7 +3,7 @@ const CustomLink = ({ backgroundImage, overlayColor, title, description }) => {
     return (
         <div
 
-            className="group rounded-lg p-6 flex flex-col items-center justify-center relative overflow-hidden transition duration-300 ease-in-out"
+            className="group rounded-lg p-9 flex flex-col items-center justify-center relative overflow-hidden transition duration-300 ease-in-out"
             style={{
                 backgroundImage: `url(${backgroundImage})`,
                 backgroundSize: "cover",
@@ -16,7 +16,7 @@ const CustomLink = ({ backgroundImage, overlayColor, title, description }) => {
             ></div>
 
             {/* Content */}
-            <h2 className="text-2xl font-semibold text-white relative z-10 group-hover:opacity-100">{title}</h2>
+            <h2 className="text-4xl font-semibold text-white relative z-10 group-hover:opacity-100">{title}</h2>
             <p className="text-white relative z-10 group-hover:opacity-100">{description}</p>
         </div>
     );

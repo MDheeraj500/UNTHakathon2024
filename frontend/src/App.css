@@ -17,6 +17,12 @@
   scroll-behavior: smooth;
 }
 
+.griffy-regular {
+  font-family: "Griffy", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
 
 .poison-button:before {
   content: "";
@@ -80,7 +86,7 @@
   left: 0;
   bottom:0px;
   width: 30%;
-  z-index: 10;
+  z-index: 1000;
   pointer-events: none;
   
   }
@@ -99,3 +105,65 @@
       from {left: 0px;}
       to {left: 500px; }
     }
+    
+
+
+    /* water animation */
+    
+
+
+    .ghost-1 {
+      position: absolute;
+      height: auto;
+      width: 600px;
+      left: 12vw;
+      top: 22vh;
+      z-index: 0;
+      filter: drop-shadow(10px 10px 30px 10px);
+      animation: moveAstro 8s infinite, fadeInOut 8s infinite;
+      transition: all 2s ease-in-out;
+      -webkit-transition: all 1s ease-in-out;
+  }
+  
+  /* Updated movement animation with slight "bounce" effect */
+  @keyframes moveAstro {
+      0%, 100% { transform: translate(-50%, -50%) scale(0.7) translateY(0); }
+      50% { transform: translate(-50%, -50%) scale(0.7) translateY(-20px); }
+  }
+  
+  /* New opacity animation for appear and disappear effect */
+  @keyframes fadeInOut {
+      0%, 100% { opacity: 0; } /* Invisible at the start and end */
+      50% { opacity: 1; } /* Fully visible in the middle */
+  }
+  
+    .ghost-2 {
+      position: absolute;
+      height: auto;
+      width: 600px;
+      right: -27vw;
+      bottom: -15vh;
+      z-index: 2;
+      filter: drop-shadow(10px 10px 30px 10px);
+      animation: moveAstro 10s infinite, fadeInOut 12s infinite;
+      transition: all 4s ease-in-out;
+      -webkit-transition: all 1s ease-in-out;
+      /* Flip vertically */
+  }
+  .ghost-2 > img{
+    transform: scaleX(-1);
+  }
+  
+  /* Updated movement animation with slight "bounce" effect */
+  @keyframes moveAstro {
+      0%, 100% { transform: translate(-50%, -50%) scale(0.7) translateY(0); }
+      50% { transform: translate(-50%, -50%) scale(0.7) translateY(-20px); }
+  }
+  
+  /* New opacity animation for appear and disappear effect */
+  @keyframes fadeInOut {
+      0%, 100% { opacity: 0; } /* Invisible at the start and end */
+      50% { opacity: 1; } /* Fully visible in the middle */
+  }
+  
+

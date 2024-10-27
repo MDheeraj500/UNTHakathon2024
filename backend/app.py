@@ -81,14 +81,14 @@ import math
 # Define the calculation logic
 def calculate_monthly_savings(user_data):
     # Input data
-    fixed_expenses = user_data['fixed_expenses'] or 0
-    variable_expenses = user_data['variable_expenses'] or 0
-    monthly_income = user_data['monthly_income'] or 0
-    trs_amt = user_data['TRS_amt'] or 0
-    _403b_amt = user_data['403b_amt'] or 0
-    ira_amt = user_data['IRA_amt'] or 0
-    retirement_age_goal = user_data['Retirement_age_goal']
-    current_age = user_data['age']
+    fixed_expenses = float(user_data['fixed_expenses'] or 0)
+    variable_expenses = float(user_data['variable_expenses'] or 0)
+    monthly_income = float(user_data['monthly_income'] or 0)
+    trs_amt = float(user_data['TRS_amt'] or 0)
+    _403b_amt = float(user_data['403b_amt'] or 0)
+    ira_amt = float(user_data['IRA_amt'] or 0)
+    retirement_age_goal = int(user_data['Retirement_age_goal'])
+    current_age = int(user_data['age'])
 
     # Constants for calculation
     annual_return_rate = 0.06  # Assuming 6% annual growth
@@ -113,7 +113,7 @@ def calculate_monthly_savings(user_data):
     result = {
         "required_monthly_savings": round(float(monthly_long_term_savings), 2),
         "feasible_savings": round(float(feasible_savings), 2),
-        "suggestion": "Increase contributions or reduce expenses" if feasible_savings < monthly_long_term_savings else "Savings goal is achievable"
+        "suggestion": "1" if feasible_savings < monthly_long_term_savings else "0"
     }
     return result
 

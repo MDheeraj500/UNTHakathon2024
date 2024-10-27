@@ -1,72 +1,49 @@
 import React from 'react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-const data = [
-    { month: 'Jan', ClassroomSupplies: 400, Books: 240, Technology: 200 },
-    { month: 'Feb', ClassroomSupplies: 300, Books: 139, Technology: 221 },
-    { month: 'Mar', ClassroomSupplies: 200, Books: 980, Technology: 229 },
-    { month: 'Apr', ClassroomSupplies: 278, Books: 390, Technology: 200 },
-    { month: 'May', ClassroomSupplies: 189, Books: 480, Technology: 218 },
-    { month: 'Jun', ClassroomSupplies: 239, Books: 380, Technology: 250 },
-    { month: 'Jul', ClassroomSupplies: 349, Books: 430, Technology: 210 },
-];
+const AreaPlot = ({ data }) => {
+    const formattedData = data.reduce((acc, item) => {
+        const { month, category, total_amount } = item;
+        const existingEntry = acc.find(entry => entry.month === month);
+        if (existingEntry) {
+            existingEntry[category] = total_amount;
+        } else {
+            acc.push({ month, [category]: total_amount });
+        }
+        return acc;
+    }, []);
 
-const AreaPlot = () => {
     return (
-        <div className="w-full  p-8 bg-gray-800 bg-opacity-90 rounded-lg shadow-lg">
+        <div className="w-full p-8 bg-gray-800 bg-opacity-90 rounded-lg shadow-lg">
             <h2 className="text-3xl font-semibold text-center text-orange-500 mb-6">Monthly Expense Area Chart</h2>
             <ResponsiveContainer width="100%" height={300}>
-                <AreaChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                    {/* Gradient for areas */}
+                <AreaChart data={formattedData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                     <defs>
-                        <linearGradient id="colorClassroomSupplies" x1="0" y1="0" x2="0" y2="1">
+                        <linearGradient id="colorFood" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="5%" stopColor="#FF6384" stopOpacity={0.8} />
                             <stop offset="95%" stopColor="#FF6384" stopOpacity={0} />
                         </linearGradient>
-                        <linearGradient id="colorBooks" x1="0" y1="0" x2="0" y2="1">
+                        <linearGradient id="colorClothing" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="5%" stopColor="#36A2EB" stopOpacity={0.8} />
                             <stop offset="95%" stopColor="#36A2EB" stopOpacity={0} />
                         </linearGradient>
-                        <linearGradient id="colorTechnology" x1="0" y1="0" x2="0" y2="1">
+                        <linearGradient id="colorLogistics" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="5%" stopColor="#FFCE56" stopOpacity={0.8} />
                             <stop offset="95%" stopColor="#FFCE56" stopOpacity={0} />
                         </linearGradient>
+                        <linearGradient id="colorMiscellaneous" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#4BC0C0" stopOpacity={0.8} />
+                            <stop offset="95%" stopColor="#4BC0C0" stopOpacity={0} />
+                        </linearGradient>
                     </defs>
-
-                    {/* Grid and Axes */}
                     <CartesianGrid strokeDasharray="3 3" stroke="#4B5563" />
                     <XAxis dataKey="month" tick={{ fill: '#FDE68A' }} />
                     <YAxis tick={{ fill: '#FDE68A' }} />
-
-                    {/* Tooltip */}
-                    <Tooltip
-                        contentStyle={{ backgroundColor: '#111827', borderColor: '#374151' }}
-                        labelStyle={{ color: '#FDE68A' }}
-                        itemStyle={{ color: '#FCD34D' }}
-                    />
-
-                    {/* Area Layers */}
-                    <Area
-                        type="monotone"
-                        dataKey="ClassroomSupplies"
-                        stroke="#FF6384"
-                        fillOpacity={1}
-                        fill="url(#colorClassroomSupplies)"
-                    />
-                    <Area
-                        type="monotone"
-                        dataKey="Books"
-                        stroke="#36A2EB"
-                        fillOpacity={1}
-                        fill="url(#colorBooks)"
-                    />
-                    <Area
-                        type="monotone"
-                        dataKey="Technology"
-                        stroke="#FFCE56"
-                        fillOpacity={1}
-                        fill="url(#colorTechnology)"
-                    />
+                    <Tooltip contentStyle={{ backgroundColor: '#111827', borderColor: '#374151' }} />
+                    <Area type="monotone" dataKey="Food" stroke="#FF6384" fill="url(#colorFood)" />
+                    <Area type="monotone" dataKey="Clothing" stroke="#36A2EB" fill="url(#colorClothing)" />
+                    <Area type="monotone" dataKey="Logistics" stroke="#FFCE56" fill="url(#colorLogistics)" />
+                    <Area type="monotone" dataKey="Miscellaneous" stroke="#4BC0C0" fill="url(#colorMiscellaneous)" />
                 </AreaChart>
             </ResponsiveContainer>
         </div>
