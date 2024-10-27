@@ -1,4 +1,5 @@
-# 📊 Teacher & Student Budgeting Tool 🧑‍🏫🎒  
+# 📊 Teacher & Student Budgeting Tool 🧑‍🏫🎒
+#                                                                               ClearCash
 *Empowering Texas Teachers & Students to Achieve Financial Wellness*  
 
 Welcome to our project developed for **UNTHackathon 2024**! We created a tool to simplify financial planning and budgeting for two unique groups: teachers and students. From managing retirement contributions to automated expense tracking, this project aims to make financial wellness accessible, insightful, and easy to manage.
