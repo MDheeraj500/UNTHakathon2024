@@ -1,9 +1,9 @@
 import './App.css'
-import Home from './components/home'
 import Login from './components/login'
 import Signup from './components/signup';
 import Dashboard from './components/dashboard';
 import { Navigate } from "react-router";
+import Expense from './components/Expense/Expense';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -16,6 +16,7 @@ function App() {
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/add-expense" element={<Expense />} />
       </Routes>
     </Router>
   )

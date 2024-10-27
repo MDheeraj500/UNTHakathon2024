@@ -74,7 +74,7 @@ console.log(response)
     };
 
     return (
-        <div className="h-screen w-full flex items-center justify-center relative font-inter bg-login-background bg-cover bg-center">
+        <div className="h-screen w-full flex items-center justify-center relative font-inter bg-signup-background bg-cover bg-center">
             <div className="absolute inset-0 bg-black opacity-70"></div>
             <div className="relative z-10 rounded-xl shadow-[0_0_20px_10px_rgba(0,0,0,0.8)] shadow-black w-50% bg-dark-gray bg-opacity-80 overflow-hidden">
                 <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 400 400" className="absolute">

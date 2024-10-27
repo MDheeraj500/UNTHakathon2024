@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { PieChart, Pie, Cell, Legend, ResponsiveContainer } from "recharts";
+import { Pie } from "react-chartjs-2";
+import {
+    Chart as ChartJS,
+    ArcElement,
+    Tooltip,
+    Legend,
+} from "chart.js";
 import axios from "axios";
+import Navbar from "./navbar";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Dashboard = () => {
     const [expenses, setExpenses] = useState({
@@ -9,7 +18,6 @@ const Dashboard = () => {
         personalExpense: 0,
     });
 
-    // Dummy data for the pie chart
     const dummyData = {
         fixedExpense: 1200,
         saving: 200,
@@ -17,16 +25,12 @@ const Dashboard = () => {
     };
 
     useEffect(() => {
-        // Function to fetch expenses from the API
         const fetchExpenses = async () => {
             try {
-                // Replace the URL with your actual API endpoint
-                const response = await axios.get("http://localhost:8080/api/expenses");
-                // Assuming response.data returns the required structure
+                const response = await api.get("http://localhost:8080/api/expenses");
                 setExpenses(response.data);
             } catch (error) {
                 console.error("Error fetching expenses:", error);
-                // Use dummy data in case of an error
                 setExpenses(dummyData);
             }
         };
@@ -34,55 +38,80 @@ const Dashboard = () => {
         fetchExpenses();
     }, []);
 
-    // Prepare data for the pie chart
-    const pieChartData = [
-        { name: "Fixed Expense", value: expenses.fixedExpense || dummyData.fixedExpense },
-        { name: "Saving", value: expenses.saving || dummyData.saving },
-        { name: "Personal Expense", value: expenses.personalExpense || dummyData.personalExpense },
-    ];
+    const pieChartData = {
+        labels: ["Fixed Expense", "Saving", "Personal Expense"],
+        datasets: [
+            {
+                data: [
+                    expenses.fixedExpense || dummyData.fixedExpense,
+                    expenses.saving || dummyData.saving,
+                    expenses.personalExpense || dummyData.personalExpense,
+                ],
+                backgroundColor: ['rgba(255, 187, 40, 0.6)', 'rgba(128, 0, 128, 0.6)', 'rgba(255, 165, 0, 0.6)'],
+                borderColor: ['#FFBB28', '#800080', '#FFA500'],
+                borderWidth: 1,
+            },
+        ],
+    };
 
-    // Define colors for the pie chart segments
-    const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
+    const pieChartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: "bottom",
+                labels: {
+                    color: "white",
+                    font: {
+                        size: 16,
+                    },
+                },
+            },
+        },
+    };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-6">
-            <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
-            <div className="w-full max-w-md">
-                <ResponsiveContainer width="100%" height={300}>
-                    <PieChart>
-                        <Pie
-                            data={pieChartData}
-                            cx="50%"
-                            cy="50%"
-                            labelLine={false}
-                            outerRadius={80}
-                            fill="#8884d8"
-                            dataKey="value"
-                            isAnimationActive={true} // Enable animations
-                            animationDuration={1000} // Duration in milliseconds
-                            animationEasing="ease-in-out" // Easing function for animations
-                        >
-                            {pieChartData.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                            ))}
-                        </Pie>
+        <div className="min-h-screen bg-black flex flex-col">
+            <Navbar />
 
-                        <Legend />
-                    </PieChart>
-                </ResponsiveContainer>
-            </div>
-            <div className="flex flex-col items-center mt-6 space-y-4">
-                <div className="bg-gray-800 p-4 rounded-lg w-full max-w-xs text-center">
-                    <h2 className="text-xl font-semibold text-neon-green">Personal Expense</h2>
-                    <p className="text-white">{`0 out of ${expenses.personalExpense || dummyData.personalExpense}`}</p>
-                </div>
-                <div className="bg-gray-800 p-4 rounded-lg w-full max-w-xs text-center">
-                    <h2 className="text-xl font-semibold text-neon-green">Savings</h2>
-                    <p className="text-white">{`0 out of ${expenses.saving || dummyData.saving}`}</p>
-                </div>
-                <div className="bg-gray-800 p-4 rounded-lg w-full max-w-xs text-center">
-                    <h2 className="text-xl font-semibold text-neon-green">Financial Literacy</h2>
-                    <p className="text-white">{`0 out of 200`}</p>
+            <div className="flex flex-grow items-center justify-center">
+                <div className="container mx-auto px-4 py-8 flex flex-col items-center">
+                    <h1 className="text-5xl font-bold text-orange-300 mb-8 ">Dashboard</h1>
+
+                    <div className=" h-full w-full border-8 border-white rounded-3xl p-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                            {/* Pie Chart Container */}
+                            <div className="bg-purple-800 rounded-lg p-6 h-[30rem] flex items-center justify-center">
+                                <div className="w-full h-full">
+                                    <Pie data={pieChartData} options={pieChartOptions} />
+                                </div>
+                            </div>
+
+                            {/* Stats Container */}
+                            <div className="grid grid-rows-3 gap-4 h-[30rem]">
+
+                                <div className="bg-purple-600 rounded-lg p-6 flex flex-col items-center justify-center">
+                                    <h2 className="text-xl font-semibold text-orange-300">Personal Expense</h2>
+                                    <p className="text-white">0 out of ${expenses.personalExpense || dummyData.personalExpense}</p>
+                                </div>
+
+                                <div className="bg-purple-600 rounded-lg p-6 flex flex-col items-center justify-center">
+                                    <h2 className="text-xl font-semibold text-orange-300">Add Expense</h2>
+                                    <p className="text-white">Add Expense</p>
+                                </div>
+
+                                <div className="bg-purple-600 rounded-lg p-6 flex flex-col items-center justify-center">
+                                    <h2 className="text-xl font-semibold text-orange-300">Savings</h2>
+                                    <p className="text-white">0 out of ${expenses.saving || dummyData.saving}</p>
+                                </div>
+
+                                <div className="bg-purple-600 rounded-lg p-6 flex flex-col items-center justify-center">
+                                    <h2 className="text-xl font-semibold text-orange-300">Financial Literacy</h2>
+                                    <p className="text-white">0 out of 200</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

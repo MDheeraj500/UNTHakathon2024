@@ -1,19 +1,24 @@
-// src/app/components/Navbar.js
-import { Link } from "react-router-dom";
-export default function Navbar() {
+import React from 'react';
+import { FaUserCircle } from 'react-icons/fa'; // Import a user icon from React Icons
+
+const Navbar = () => {
     return (
-        <nav className="bg-white shadow-lg text-black">
-            <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-                {/* Logo */}
-                <div className="text-xl font-bold">App</div>
-                {/* Navigation Items */}
-                <div className="space-x-8 flex">
-                    <Link to="/">Home</Link>
-                    <Link to="/quiz">Quiz</Link>
-                    <Link to="/flashcard">Flashcard</Link>
-                    <Link to="/summarizer">Summarizer</Link>
-                </div>
+        <nav className="flex justify-between items-center px-10 py-4 bg-black text-white">
+            <div className="flex items-center">
+                {/* <img
+                    src="path/to/your/logo.png" // Replace with your logo's path
+                    alt="Logo"
+                    className="h-8 mr-4"
+                /> */}
+                <span className="text-xl font-bold">App</span>
+            </div>
+            <div className="flex items-center">
+                <span className="text-lg px-4">User Name</span>
+                <FaUserCircle className="h-8 w-8 mr-2" />
+
             </div>
         </nav>
     );
-}
+};
+
+export default Navbar;
