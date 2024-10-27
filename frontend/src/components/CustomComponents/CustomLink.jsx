@@ -3,7 +3,7 @@ const CustomLink = ({ backgroundImage, overlayColor, title, description }) => {
     return (
         <div
 
-            className="group rounded-lg p-9 flex flex-col items-center justify-center relative overflow-hidden transition duration-300 ease-in-out"
+            className="group rounded-lg p-14 flex flex-col items-center justify-center relative overflow-hidden transition duration-300 ease-in-out"
             style={{
                 backgroundImage: `url(${backgroundImage})`,
                 backgroundSize: "cover",
