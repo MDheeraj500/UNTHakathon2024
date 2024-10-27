@@ -26,13 +26,15 @@ const Login = () => {
             alert("Please read the terms & conditions!");
         } else {
             try {
-                const response = await axios.post("http://localhost:8080/api/login", data);
+                const response = await axios.post("http://127.0.0.1:5000/login", data);
                 const reply = response.status;
 
                 if (reply === 209) {
                     alert("Invalid Credentials!");
                 } else if (reply === 200)
-                    Cookies.set('userId', response.data.userId, { expires: 7 }); {
+                    Cookies.set('user_id', response.data.user_id, { expires: 7 });
+                    console.log("User ID set in cookie:", response.data.user_id);
+                    {
                     navigate("/dashboard"); // Navigate to the dashboard on successful login
                 }
             } catch (error) {
