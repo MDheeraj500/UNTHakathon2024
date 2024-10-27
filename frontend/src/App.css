@@ -166,4 +166,48 @@
       50% { opacity: 1; } /* Fully visible in the middle */
   }
   
-
+      .cute-ghost {
+        position: absolute;
+        height: auto;
+        width: 600px;
+        right: -35vw;
+        bottom: -20vh;
+        z-index: 2;
+        filter: drop-shadow(10px 10px 30px 10px);
+        animation: moveAstro 2s infinite;
+        transition: all 4s ease-in-out;
+        -webkit-transition: all 1s ease-in-out;
+        /* Flip vertically */
+    }
+    .ghost-2 > img{
+      transform: scaleX(-1);
+    }
+    
+    /* Updated movement animation with slight "bounce" effect */
+    @keyframes moveAstro {
+        0%, 100% { transform: translate(-50%, -50%) scale(0.7) translateY(0); }
+        50% { transform: translate(-50%, -50%) scale(0.7) translateY(-20px); }
+    }
+      .pumkin {
+        position: absolute;
+        height: auto;
+        width: 600px;
+        left: 12vw;
+        bottom: -20vh;
+        z-index: 2;
+        filter: drop-shadow(10px 10px 30px 10px);
+        animation: moveAstro 2s infinite;
+        transition: all 4s ease-in-out;
+        -webkit-transition: all 1s ease-in-out;
+        /* Flip vertically */
+    }
+    .ghost-2 > img{
+      transform: scaleX(-1);
+    }
+    
+    /* Updated movement animation with slight "bounce" effect */
+    @keyframes moveAstro {
+        0%, 100% { transform: translate(-50%, -50%) scale(0.7) translateY(0); }
+        50% { transform: translate(-50%, -50%) scale(0.7) translateY(-20px); }
+    }
+  
