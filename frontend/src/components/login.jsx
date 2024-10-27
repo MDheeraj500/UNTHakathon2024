@@ -25,7 +25,7 @@ const Login = () => {
             alert("Please read the terms & conditions!");
         } else {
             try {
-                const response = await axios.post("http://localhost:8080/api/login", data);
+                const response = await axios.post("http://127.0.0.1:5000/login", data);
                 const reply = response.status;
 
                 if (reply === 209) {

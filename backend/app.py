@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 import mysql.connector
 from mysql.connector import Error
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 # Database connection configuration
 db_config = {
@@ -41,6 +43,7 @@ CREATE TABLE IF NOT EXISTS ExpenseLog (
     expense_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     amount DECIMAL(10, 2) NOT NULL,
+    description VARCHAR(100),
     date DATE NOT NULL,
     category ENUM('Food', 'Clothing', 'Logistics', 'Miscellaneous') NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE
@@ -103,22 +106,23 @@ def setup_database():
 def signup():
     # Get data from the request body
     data = request.json
-    username = data.get("username")
+    print(data)
+    username = data.get("fullname")
     email = data.get("email")
     password = data.get("password")
     age = data.get("age")
     occupation = data.get("occupation")
-    monthly_income = data.get("monthly_income")
-    savings_goal = data.get("savings_goal")
-    fixed_expenses = data.get("fixed_expenses")
-    variable_expenses = data.get("variable_expenses")
-    is_TRS = data.get("is_TRS", False)
-    TRS_amt = data.get("TRS_amt", 0)
-    is_403b = data.get("is_403b", False)
-    _403b_amt = data.get("403b_amt", 0)
-    is_IRA = data.get("is_IRA", False)
-    IRA_amt = data.get("IRA_amt", 0)
-    Retirement_age_goal = data.get("Retirement_age_goal")
+    monthly_income = data.get("monthlyIncome")
+    savings_goal = data.get("monthlySavingGoal")
+    fixed_expenses = data.get("fixedExpense")
+    variable_expenses = data.get("personalExpenseTarget")
+    is_TRS = data.get("trsChecked", False)
+    TRS_amt = data.get("trsAmount", 0)
+    is_403b = data.get("b403Checked", False)
+    _403b_amt = data.get("b403Amount", 0)
+    is_IRA = data.get("traChecked", False)
+    IRA_amt = data.get("traAmount", 0)
+    Retirement_age_goal = data.get("retirementAgeGoal")
 
     # Check for required fields
     if not username or not email or not password:
@@ -161,7 +165,7 @@ def login():
     data = request.json
     email = data.get("email")
     password = data.get("password")
-
+    print(data)
     # Check for required fields
     if not email or not password:
         return jsonify({"error": "Email and password are required"}), 400
@@ -177,6 +181,7 @@ def login():
         query = "SELECT * FROM user WHERE email = %s AND password = %s"
         cursor.execute(query, (email, password))
         user = cursor.fetchone()
+        print(user)
 
         # Check if the user is found
         if user:
@@ -190,6 +195,99 @@ def login():
         if conn and conn.is_connected():
             cursor.close()
             conn.close()
+
+@app.route("/dashboard/<int:user_id>", methods=["GET"])
+def dashboard(user_id):
+    """Fetches financial data for the user and returns calculated dashboard metrics."""
+    
+    # Database query to fetch user financial data
+    conn = None
+    try:
+        # Establishing the connection
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor(dictionary=True)  # Fetch results as dictionaries
+        
+        # Query to fetch financial details for the user
+        query = """
+        SELECT monthly_income, fixed_expenses, variable_expenses AS personal_expenses,
+               savings_goal, TRS_amt, 403b_amt, IRA_amt
+        FROM user
+        WHERE user_id = %s
+        """
+        cursor.execute(query, (user_id,))
+        user_data = cursor.fetchone()
+
+        # Check if user data is found
+        if not user_data:
+            return jsonify({"error": "User not found"}), 404
+
+        # Perform calculations for the dashboard
+        fixed_expenses = user_data['fixed_expenses']
+        personal_expenses = user_data['personal_expenses']
+        retirement_savings = user_data['TRS_amt'] + user_data['IRA_amt'] + user_data['403b_amt']
+        current_savings = user_data['monthly_income'] - (fixed_expenses + personal_expenses + retirement_savings)
+
+        # need to check for the edge case when the sum of the three expenses is more than the monthly income
+
+        # Prepare the dashboard data
+        dashboard_data = {
+            "fixed_expenses": fixed_expenses,
+            "current_savings": current_savings,
+            "personal_expenses": personal_expenses,
+            "retirement_savings": retirement_savings
+        }
+
+        # Send calculated dashboard data as JSON response
+        return jsonify(dashboard_data), 200
+
+    except Error as err:
+        return jsonify({"error": str(err)}), 500
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+@app.route("/expense", methods=["POST"])
+def add_expense():
+    """Adds a new expense entry to the ExpenseLog table."""
+
+    # Get data from the request body
+    data = request.json
+    user_id = data.get("user_id")
+    amount = data.get("amount")
+    description = data.get("description")
+    date = data.get("date")
+    category = data.get("category")
+
+    # Check for required fields
+    if not user_id or not amount or not date or not category:
+        return jsonify({"error": "User ID, amount, date, and category are required"}), 400
+
+    # Database insertion
+    conn = None
+    try:
+        # Establishing the connection
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
+
+        # SQL query to insert a new expense into ExpenseLog
+        insert_query = """
+        INSERT INTO ExpenseLog (user_id, amount, description, date, category)
+        VALUES (%s, %s, %s, %s, %s)
+        """
+        cursor.execute(insert_query, (user_id, amount, description, date, category))
+        conn.commit()
+
+        # Send success response
+        return jsonify({"message": "Expense added successfully!"}), 201
+
+    except Error as err:
+        return jsonify({"error": str(err)}), 500
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
 
 if __name__ == '__main__':
     app.run(debug=True)
