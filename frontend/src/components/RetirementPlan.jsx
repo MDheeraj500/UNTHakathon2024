@@ -32,7 +32,7 @@ const RetirementPlan = () => {
     }, []);
 
     const IS_GONNA_LIVE = saving && saving.suggestion === "1";
-    const mainText = IS_GONNA_LIVE ? "You will live with the angels" : "You will be a financial zombie";
+    const mainText = IS_GONNA_LIVE ? "You will be a financial zombie" : "You will live a free spirit";
 
     return (
         <div className="h-screen w-full font-inter bg-zinc-900 text-white relative overflow-hidden">
@@ -62,8 +62,8 @@ const RetirementPlan = () => {
                             width={470}
                         />
                         <div className="absolute top-[17%] left-1/2 transform -translate-x-1/2">
-                            {IS_GONNA_LIVE ? <img alt='angel' src={angle} height={100} width={100} />
-                                : <img alt='zombie' src={zombie} height={200} width={200} />}
+                            {IS_GONNA_LIVE ? <img alt='zombie' src={zombie} height={200} width={200} /> : <img alt='angel' src={angle} height={100} width={100} />
+                                }
                         </div>
                         <h2 className="absolute bottom-[10%] left-1/2 transform -translate-x-1/2 font-extrabold text-3xl w-60 text-center text-black">
                             {mainText}
