@@ -184,8 +184,89 @@ class LearningAgent(GroqAgent):
         return self._get_response(messages)
 
 
-
-
+class RetirementAgent(GroqAgent):
+    def __init__(self, groq_api_key: str):
+        super().__init__(groq_api_key)
+        
+    def analyze_retirement_plan(self, user_context: Dict) -> str:
+        messages = [
+            SystemMessage(content="""You are the Retirement Oracle, a mystical being who can peer into the financial future 
+            of mortals. Your task is to analyze their retirement preparations and provide guidance with a spooky Halloween theme.
+            
+            Structure your response as follows:
+            1. 🔮 The Vision (Overview)
+               - Current retirement contributions
+               - Projected retirement age
+               - Basic projection of future wealth
+            
+            2. 💀 The Three Spirits of Retirement
+               - TRS Analysis (The Spirit of Security)
+               - 403(b) Analysis (The Spirit of Growth)
+               - IRA Analysis (The Spirit of Freedom)
+            
+            3. 🧙‍♂️ The Ancient Wisdom
+               - Contribution balance recommendations
+               - Tax optimization strategies
+               - Risk management insights
+            
+            4. 🎃 The Prophecy
+               - Long-term projection
+               - Suggested adjustments
+               - Warning signs to watch
+            
+            Use spooky metaphors and maintain the Halloween theme while providing accurate financial advice."""),
+            HumanMessage(content="Analyze the retirement preparations of this mortal...")
+        ]
+        return self._get_response(messages)
+    
+    def calculate_retirement_metrics(self, user_context: Dict) -> Dict:
+        """Calculate key retirement metrics"""
+        current_age = user_context['personal']['age']
+        retirement_age = user_context['financial']['retirement']['desired_age']
+        years_to_retirement = retirement_age - current_age
+        monthly_income = user_context['financial']['monthly_income']
+        
+        # Get current contributions
+        trs = user_context['financial']['retirement']['trs_contribution']
+        contribution_403b = user_context['financial']['retirement']['contribution_403b']
+        ira = user_context['financial']['retirement']['ira_contribution']
+        total_monthly = trs + contribution_403b + ira
+        
+        # Calculate future values (7% annual return)
+        def future_value(monthly_amount: float, years: int, rate: float = 0.07) -> float:
+            months = years * 12
+            return monthly_amount * (((1 + rate/12)**(months) - 1) / (rate/12)) * (1 + rate/12)
+        
+        projected_trs = future_value(trs, years_to_retirement)
+        projected_403b = future_value(contribution_403b, years_to_retirement)
+        projected_ira = future_value(ira, years_to_retirement)
+        total_projected = projected_trs + projected_403b + projected_ira
+        
+        # Calculate target retirement savings (25x annual expenses - 4% rule)
+        target_monthly_retirement = monthly_income * 0.8  # 80% of current income
+        target_annual_retirement = target_monthly_retirement * 12
+        target_nest_egg = target_annual_retirement * 25
+        
+        return {
+            'current_age': current_age,
+            'retirement_age': retirement_age,
+            'years_to_retirement': years_to_retirement,
+            'monthly_contributions': {
+                'trs': trs,
+                '403b': contribution_403b,
+                'ira': ira,
+                'total': total_monthly
+            },
+            'projected_values': {
+                'trs': projected_trs,
+                '403b': projected_403b,
+                'ira': projected_ira,
+                'total': total_projected
+            },
+            'target_nest_egg': target_nest_egg,
+            'monthly_income': monthly_income,
+            'target_monthly_retirement': target_monthly_retirement
+        }
 # from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 # from langchain_core.messages import HumanMessage, SystemMessage
 # from langchain_groq import ChatGroq

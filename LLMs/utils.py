@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from agents import ChatbotAgent, SummaryAgent, LearningAgent #FlashcardAgent,
+from agents import ChatbotAgent, SummaryAgent, LearningAgent, RetirementAgent #FlashcardAgent,
 
 
 # Load environment variables
@@ -17,6 +17,8 @@ def get_agent(agent_type):
         return SummaryAgent(groq_api_key)
     elif agent_type == "learning":
         return LearningAgent(groq_api_key)
+    elif agent_type == "retirement":
+        return RetirementAgent(groq_api_key)
     
 
 # # Load environment variables

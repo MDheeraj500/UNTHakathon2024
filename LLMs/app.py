@@ -427,12 +427,151 @@ def render_chat_and_summary():
                         use_container_width=True
                     )
 
+
+def render_retirement_interface():
+    st.title("🔮 The Retirement Crystal Ball")
+    
+    # Initialize retirement agent
+    retirement_agent = initialize_agent("retirement")
+    retirement_agent.set_user_context(st.session_state.user_info)
+    
+    # Calculate retirement metrics
+    metrics = retirement_agent.calculate_retirement_metrics(st.session_state.user_info)
+    
+    # Create tabs for different views
+    tab1, tab2, tab3 = st.tabs(["🔮 Crystal Ball", "💰 Contribution Adjuster", "📜 Oracle's Wisdom"])
+    
+    with tab1:
+        st.markdown("### 🌙 Your Retirement Journey")
+        
+        # Show current status
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric(
+                "Current Age 👻",
+                f"{metrics['current_age']} years",
+                f"{metrics['years_to_retirement']} years to go"
+            )
+        with col2:
+            st.metric(
+                "Monthly Contributions 🎃",
+                f"${metrics['monthly_contributions']['total']:,.2f}",
+                "Total across all accounts"
+            )
+        with col3:
+            st.metric(
+                "Target Retirement 💀",
+                f"Age {metrics['retirement_age']}",
+                f"${metrics['target_monthly_retirement']:,.2f}/mo needed"
+            )
+        
+        # Show projection chart
+        st.markdown("### 📊 The Crystal Ball's Vision")
+        
+        # Generate projection data for chart
+        years = range(metrics['current_age'], metrics['retirement_age'] + 1)
+        projection_data = {
+            'Age': years,
+            'TRS': [metrics['projected_values']['trs'] * (i/len(years)) for i in range(len(years))],
+            '403(b)': [metrics['projected_values']['403b'] * (i/len(years)) for i in range(len(years))],
+            'IRA': [metrics['projected_values']['ira'] * (i/len(years)) for i in range(len(years))]
+        }
+        
+        import pandas as pd
+        df = pd.DataFrame(projection_data)
+        df['Total'] = df['TRS'] + df['403(b)'] + df['IRA']
+        
+        st.line_chart(df.set_index('Age'))
+        
+        # Show summary metrics
+        st.markdown("### 🎯 The Final Prophecy")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.info(f"🎯 Target Nest Egg: ${metrics['target_nest_egg']:,.2f}")
+        with col2:
+            st.info(f"✨ Projected Total: ${metrics['projected_values']['total']:,.2f}")
+            
+        # Show on track status
+        if metrics['projected_values']['total'] >= metrics['target_nest_egg']:
+            st.success("🌟 The spirits smile upon your retirement journey! You're on track to meet your goals.")
+        else:
+            gap = metrics['target_nest_egg'] - metrics['projected_values']['total']
+            st.warning(f"⚠️ The mists show a gap of ${gap:,.2f} in your retirement preparations!")
+    
+    with tab2:
+        st.markdown("### 🕯️ Adjust Your Contributions")
+        
+        # Create sliders for contribution adjustment
+        col1, col2 = st.columns(2)
+        with col1:
+            trs_contrib = st.slider(
+                "🏛️ TRS Monthly Contribution",
+                0, 2000, 
+                value=int(metrics['monthly_contributions']['trs']),
+                step=50
+            )
+            
+            contrib_403b = st.slider(
+                "📈 403(b) Monthly Contribution",
+                0, 2000,
+                value=int(metrics['monthly_contributions']['403b']),
+                step=50
+            )
+            
+            ira_contrib = st.slider(
+                "💰 IRA Monthly Contribution",
+                0, 500,
+                value=int(metrics['monthly_contributions']['ira']),
+                step=25
+            )
+        
+        with col2:
+            st.markdown("### 📊 Impact Analysis")
+            total_monthly = trs_contrib + contrib_403b + ira_contrib
+            current_total = metrics['monthly_contributions']['total']
+            
+            st.metric(
+                "New Monthly Total",
+                f"${total_monthly:,.2f}",
+                f"{((total_monthly - current_total) / current_total * 100):.1f}%"
+            )
+            
+            # Calculate new projections
+            new_total = retirement_agent.calculate_retirement_metrics({
+                **st.session_state.user_info,
+                'financial': {
+                    **st.session_state.user_info['financial'],
+                    'retirement': {
+                        **st.session_state.user_info['financial']['retirement'],
+                        'trs_contribution': trs_contrib,
+                        'contribution_403b': contrib_403b,
+                        'ira_contribution': ira_contrib
+                    }
+                }
+            })['projected_values']['total']
+            
+            st.metric(
+                "New Projected Total",
+                f"${new_total:,.2f}",
+                f"{((new_total - metrics['projected_values']['total']) / metrics['projected_values']['total'] * 100):.1f}%"
+            )
+    
+    with tab3:
+        st.markdown("### 📜 The Oracle's Wisdom")
+        
+        if st.button("🔮 Consult the Retirement Oracle", type="primary"):
+            with st.spinner("The Oracle peers into your future..."):
+                analysis = retirement_agent.analyze_retirement_plan(st.session_state.user_info)
+                st.markdown(analysis)
+
+
 def render_main_interface():
     # Get navigation selection
     st.sidebar.title("Navigation")
     pages = {
-        "Chat & Summary": "chat_summary",
-        "Learning Path": "learning"
+    "Chat & Summary": "chat_summary",
+    "Learning Path": "learning",
+    "Retirement Crystal Ball": "retirement"  # New option
     }
     selection = st.sidebar.radio("Select Feature", list(pages.keys()))
 
@@ -450,6 +589,8 @@ def render_main_interface():
         render_chat_and_summary()
     elif selection == "Learning Path":
         render_learning_path()
+    elif selection == "Retirement Crystal Ball":
+        render_retirement_interface()
 
 if __name__ == "__main__":
     # Check for API key
