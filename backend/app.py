@@ -289,5 +289,73 @@ def add_expense():
             conn.close()
 
 
+@app.route("/LogAnalysis", methods=["GET"])
+def get_LogAnalysis():
+    """Fetch data for dashboard charts."""
+    
+    conn = None
+    try:
+        # Establish the database connection
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor(dictionary=True)
+
+        # Query 1: All Categories Bar Chart
+        cursor.execute("""
+            SELECT category, SUM(amount) AS total_amount
+            FROM ExpenseLog
+            GROUP BY category
+            ORDER BY total_amount DESC;
+        """)
+        all_categories_data = cursor.fetchall()
+
+        # Query 2: Expense Trend Over Time (Line Chart)
+        cursor.execute("""
+            SELECT DATE_FORMAT(date, '%Y-%m') AS month, SUM(amount) AS total_expense
+            FROM ExpenseLog
+            GROUP BY month
+            ORDER BY month;
+        """)
+        expense_trend_data = cursor.fetchall()
+
+        # Query 3: Expense Category Distribution (Pie Chart)
+        cursor.execute("""
+             SELECT category, 
+           SUM(amount) AS total_amount, 
+           (SUM(amount) / (SELECT SUM(amount) FROM ExpenseLog) * 100) AS percentage
+    FROM ExpenseLog
+    GROUP BY category;
+        """)
+        category_distribution_data = cursor.fetchall()
+
+        # Query 4: Monthly Expense Area Chart
+        cursor.execute("""
+            SELECT DATE_FORMAT(date, '%Y-%m') AS month, category, SUM(amount) AS total_amount
+            FROM ExpenseLog
+            GROUP BY month, category
+            ORDER BY month, category;
+        """)
+        monthly_expense_area_data = cursor.fetchall()
+
+        # Prepare the response data
+        dashboard_data = {
+            "all_categories": all_categories_data,
+            "expense_trend": expense_trend_data,
+            "category_distribution": category_distribution_data,
+            "monthly_expense_area": monthly_expense_area_data
+        }
+
+        print(dashboard_data)
+
+        return jsonify(dashboard_data), 200
+
+    except Error as err:
+        print(f"Error fetching dashboard data: {err}")
+        return jsonify({"error": str(err)}), 500
+    finally:
+        if conn and conn.is_connected():
+            cursor.close()
+            conn.close()
+
+
 if __name__ == '__main__':
     app.run(debug=True)

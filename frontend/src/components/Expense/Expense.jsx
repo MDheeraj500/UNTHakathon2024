@@ -5,8 +5,10 @@ import DatePicker from '../CustomComponents/DatePicker';
 import Dropdown from '../CustomComponents/Dropdown';
 import TextInput from '../CustomComponents/TextInput';
 import Cookies from 'js-cookie';
+import { useNavigate } from "react-router-dom";
 
 const Expense = () => {
+    const navigate = useNavigate();
     const [category, setCategory] = useState('');
     const [date, setDate] = useState('');
     const [description, setDescription] = useState('');
@@ -43,7 +45,9 @@ const Expense = () => {
                 setCategory('');
                 setDate('');
 
-                navigate("/dashboard"); //navigating to analysis dashboard
+                //navigate("/dashboard"); //navigating to analysis dashboard
+                navigate("/log-analysis");
+
             } else {
                 alert("Error adding expense. Please try again.");
             }
