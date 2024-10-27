@@ -185,10 +185,10 @@ def login():
 
         # Check if the user is found
         if user:
-            return jsonify({"message": "Login successful!"}), 200
+            # Return the user_id to the frontend on successful login
+            return jsonify({"message": "Login successful!", "user_id": user["user_id"]}), 200
         else:
             return jsonify({"error": "Invalid email or password"}), 401
-
     except Error as err:
         return jsonify({"error": str(err)}), 500
     finally:

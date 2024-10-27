@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
+import Cookies from 'js-cookie';
 import {
     Chart as ChartJS,
     ArcElement,
@@ -27,7 +28,17 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchExpenses = async () => {
             try {
-                const response = await api.get("http://localhost:8080/api/expenses");
+                // Get user_id from cookies
+                const user_id = Cookies.get("user_id");
+                if (!user_id) {
+                    console.error("User ID not found in cookies");
+                    setExpenses(dummyData);
+                    return;
+                }
+
+                // Make request to the dashboard endpoint with user_id
+                const response = await axios.get(`http://127.0.0.1:5000/dashboard/${user_id}`);
+                console.log("Response data:", response.data);
                 setExpenses(response.data);
             } catch (error) {
                 console.error("Error fetching expenses:", error);
@@ -39,16 +50,27 @@ const Dashboard = () => {
     }, []);
 
     const pieChartData = {
-        labels: ["Fixed Expense", "Saving", "Personal Expense"],
+        labels: ["Fixed Expense", "Saving", "Personal Expense", "Retirement Savings"],
         datasets: [
             {
                 data: [
-                    expenses.fixedExpense || dummyData.fixedExpense,
-                    expenses.saving || dummyData.saving,
-                    expenses.personalExpense || dummyData.personalExpense,
+                    expenses.fixed_expenses || dummyData.fixedExpense,
+                    expenses.current_savings|| dummyData.saving,
+                    expenses.personal_expenses || dummyData.personalExpense,
+                    expenses.retirement_savings || 0,
                 ],
-                backgroundColor: ['rgba(255, 187, 40, 0.6)', 'rgba(128, 0, 128, 0.6)', 'rgba(255, 165, 0, 0.6)'],
-                borderColor: ['#FFBB28', '#800080', '#FFA500'],
+                backgroundColor: [
+                    'rgba(255, 187, 40, 0.6)',   // Fixed Expense
+                    'rgba(128, 0, 128, 0.6)',   // Saving
+                    'rgba(255, 165, 0, 0.6)',   // Personal Expense
+                    'rgba(60, 179, 113, 0.6)',  // Retirement Savings (new color)
+                ],
+                borderColor: [
+                    '#FFBB28', // Fixed Expense
+                    '#800080', // Saving
+                    '#FFA500', // Personal Expense
+                    '#3CB371', // Retirement Savings (new color)
+                ],
                 borderWidth: 1,
             },
         ],

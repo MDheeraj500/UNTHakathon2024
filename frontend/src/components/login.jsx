@@ -32,7 +32,9 @@ const Login = () => {
                 if (reply === 209) {
                     alert("Invalid Credentials!");
                 } else if (reply === 200)
-                    Cookies.set('userId', response.data.userId, { expires: 7 }); {
+                    Cookies.set('user_id', response.data.user_id, { expires: 7 });
+                    console.log("User ID set in cookie:", response.data.user_id);
+                    {
                     navigate("/dashboard"); // Navigate to the dashboard on successful login
                 }
             } catch (error) {
