@@ -39,10 +39,11 @@ Follow these steps to set up the project on your local machine:
 ```bash
 git clone <repository-link>
 cd budgeting-tool
-
+```
 ### 2. Install Dependencies
 ```bash
 pip install -r requirements.txt
+```
 
 ### 3. Set Up MySQL Database
 Update db_config in app.py with your MySQL credentials.
@@ -51,7 +52,7 @@ Run the server to auto-create tables (user and ExpenseLog).
 ### 4. Start the Server
 ```bash
 python app.py
-
+```
 
 ## 📬 API Endpoints
 
@@ -80,5 +81,5 @@ Explore these endpoints for full functionality:
 We welcome contributions to expand and enhance the tool! Please fork the repository, open issues, and submit pull requests.
 
 
-💼 Authors & Acknowledgments
+## 💼 Authors & Acknowledgments
 Thank you to all our mentors, collaborators, and everyone who provided feedback during UNTHackathon 2024!
