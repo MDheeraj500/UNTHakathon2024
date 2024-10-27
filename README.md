@@ -29,7 +29,7 @@ ClearCash takes data privacy seriously. We’ve implemented secure, encrypted pr
 
 | Component       | Technology                         |
 |-----------------|------------------------------------|
-| **Frontend**    | React, Tailwind CSS                |
+| **Frontend**    | React, Tailwind CSS, StreamLit            |
 | **Backend**     | Flask (Python), SQL                |
 | **LLM Integration** | Language Model APIs, Custom Agents  |
 | **Notifications & Alerts** | Real-time AI-powered prompts |
@@ -71,7 +71,7 @@ ClearCash offers a range of endpoints to manage data and provide insights:
 - **POST /login** – Authenticate and access your dashboard.
 - **GET /dashboard/<user_id>** – Access a personalized, AI-driven financial overview.
 - **POST /expense** – Log expenses in the `ExpenseLog`.
-- **GET /calculate_savings/<user_id>** – Receive real-time savings insights and suggestions from LLMs.
+- **GET /RetirementPlan** – Receive real-time savings insights and suggestions from LLMs.
 
 ---
 
