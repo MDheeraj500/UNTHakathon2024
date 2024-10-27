@@ -22,7 +22,7 @@ import Navbar from "./navbar";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Dashboard = () => {
-    const [waterActive, setWaterActive] = useState(false); // Track water animation
+
 
     const [expenses, setExpenses] = useState({
         fixedExpense: 0,
@@ -112,6 +112,7 @@ const Dashboard = () => {
             <div className="ghost-2">
                 <img src={ghost1} height={400} width={400} />
             </div>
+
             <div className="flex flex-grow items-center justify-center">
                 <div className="container mx-auto px-4 py-8 flex flex-col items-center">
                     <h1 className="text-9xl font-bold text-orange-300 mb-8 griffy-regular ">Dashboard</h1>
@@ -165,12 +166,7 @@ const Dashboard = () => {
                                         description=""
                                     />
                                 </Link>
-                                <CustomLink
-                                    backgroundImage={backgroundImage4}
-                                    overlayColor="bg-sky-500"
-                                    title="Financial Literacy"
-                                    description=""
-                                />
+
                             </div>
                         </div>
                     </div>
