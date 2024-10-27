@@ -40,6 +40,7 @@ const Expense = () => {
                 setAmount('');
                 setCategory('');
                 setDate('');
+                navigate("/log-analysis");
             } else {
                 alert("Error adding expense. Please try again.");
             }

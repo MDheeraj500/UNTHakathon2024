@@ -9,6 +9,7 @@ import {
 } from "chart.js";
 import axios from "axios";
 import Navbar from "./navbar";
+import { Link } from "react-router-dom";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -55,7 +56,7 @@ const Dashboard = () => {
             {
                 data: [
                     expenses.fixed_expenses || dummyData.fixedExpense,
-                    expenses.current_savings|| dummyData.saving,
+                    expenses.current_savings || dummyData.saving,
                     expenses.personal_expenses || dummyData.personalExpense,
                     expenses.retirement_savings || 0,
                 ],
@@ -103,7 +104,7 @@ const Dashboard = () => {
                     <div className=" h-full w-full border-8 border-white rounded-3xl p-8">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                             {/* Pie Chart Container */}
-                            <div className="bg-purple-800 rounded-lg p-6 h-[30rem] flex items-center justify-center">
+                            <div className="bg-dark-gray rounded-lg p-6 h-[30rem] flex items-center justify-center">
                                 <div className="w-full h-full">
                                     <Pie data={pieChartData} options={pieChartOptions} />
                                 </div>
@@ -112,22 +113,22 @@ const Dashboard = () => {
                             {/* Stats Container */}
                             <div className="grid grid-rows-3 gap-4 h-[30rem]">
 
-                                <div className="bg-purple-600 rounded-lg p-6 flex flex-col items-center justify-center">
+                                <Link to="/log-analysis" className="bg-witch-green rounded-lg p-6 flex flex-col items-center justify-center">
                                     <h2 className="text-xl font-semibold text-orange-300">Personal Expense</h2>
                                     <p className="text-white">0 out of ${expenses.personalExpense || dummyData.personalExpense}</p>
-                                </div>
+                                </Link>
 
-                                <div className="bg-purple-600 rounded-lg p-6 flex flex-col items-center justify-center">
+                                <Link to="/add-expense" className="bg-spooky-orange rounded-lg p-6 flex flex-col items-center justify-center">
                                     <h2 className="text-xl font-semibold text-orange-300">Add Expense</h2>
                                     <p className="text-white">Add Expense</p>
-                                </div>
+                                </Link>
 
-                                <div className="bg-purple-600 rounded-lg p-6 flex flex-col items-center justify-center">
+                                <div className="bg-deep-gray rounded-lg p-6 flex flex-col items-center justify-center">
                                     <h2 className="text-xl font-semibold text-orange-300">Savings</h2>
                                     <p className="text-white">0 out of ${expenses.saving || dummyData.saving}</p>
                                 </div>
 
-                                <div className="bg-purple-600 rounded-lg p-6 flex flex-col items-center justify-center">
+                                <div className="bg-monster-yellow rounded-lg p-6 flex flex-col items-center justify-center">
                                     <h2 className="text-xl font-semibold text-orange-300">Financial Literacy</h2>
                                     <p className="text-white">0 out of 200</p>
                                 </div>

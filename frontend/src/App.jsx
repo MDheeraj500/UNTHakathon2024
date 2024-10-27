@@ -5,6 +5,7 @@ import Dashboard from './components/dashboard';
 import { Navigate } from "react-router";
 import Expense from './components/Expense/Expense';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import LogAnalysis from './components/LogAnalysis';
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/add-expense" element={<Expense />} />
+        <Route path="/log-analysis" element={<LogAnalysis />} />
       </Routes>
     </Router>
   )
