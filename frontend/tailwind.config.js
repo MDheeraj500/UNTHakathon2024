@@ -13,6 +13,8 @@ export default {
             backgroundImage: {
                 "login-background":
                     "url('/src/assets/loginpage_background.png')", // Replace with the correct image path
+                "signup-background": "url('/src/assets/signup-bg.webp')",
+                "purple-bg-db": "url('/src/assets/purple-bg-db.avif')",
             },
             boxShadow: {
                 neon: "0 0 10px #39FF14", // Neon glow effect
