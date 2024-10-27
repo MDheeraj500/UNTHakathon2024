@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -30,7 +31,8 @@ const Login = () => {
 
                 if (reply === 209) {
                     alert("Invalid Credentials!");
-                } else if (reply === 200) {
+                } else if (reply === 200)
+                    Cookies.set('userId', response.data.userId, { expires: 7 }); {
                     navigate("/dashboard"); // Navigate to the dashboard on successful login
                 }
             } catch (error) {
